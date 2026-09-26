@@ -1,0 +1,32 @@
+services:
+  web:
+    build: ./backend
+    ports:
+      - "5000:5000"
+    environment:
+      SECRET_KEY: change-this-in-production
+      JWT_SECRET_KEY: change-this-jwt-secret
+      DATABASE_URL: mysql+pymysql://monksberry:monksberry@db:3306/monksberry
+      ADMIN_EMAIL: admin@monksberry.local
+      ADMIN_PASSWORD: Admin@12345
+    depends_on:
+      db:
+        condition: service_healthy
+  db:
+    image: mysql:8.4
+    environment:
+      MYSQL_DATABASE: monksberry
+      MYSQL_USER: monksberry
+      MYSQL_PASSWORD: monksberry
+      MYSQL_ROOT_PASSWORD: root-change-me
+    ports:
+      - "3307:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD","mysqladmin","ping","-h","localhost","-u","root","-proot-change-me"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+volumes:
+  mysql_data:
