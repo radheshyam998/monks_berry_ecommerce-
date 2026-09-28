@@ -26,6 +26,20 @@ def sitemap():
 </urlset>"""
 
     return Response(xml, status=200, mimetype="application/xml")
+
+
+@app.route("/robots.txt", methods=["GET"])
+def robots_txt():
+    from flask import Response
+
+    content = """User-agent: *
+Allow: /
+
+Sitemap: https://the-monks-berry-95z0.onrender.com/sitemap.xml
+"""
+    return Response(content, status=200, mimetype="text/plain")
+
+
 app.config.from_object(Config)
 db.init_app(app)
 JWTManager(app)
