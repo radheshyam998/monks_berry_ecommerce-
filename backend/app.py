@@ -14,6 +14,18 @@ from config import Config
 from models import db, User, Product, Order, OrderItem
 
 app = Flask(__name__, static_folder="static", static_url_path="/static")
+@app.route("/sitemap.xml", methods=["GET"])
+def sitemap():
+    from flask import Response
+
+    xml = """<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+    <url>
+        <loc>https://the-monks-berry-95z0.onrender.com/</loc>
+    </url>
+</urlset>"""
+
+    return Response(xml, status=200, mimetype="application/xml")
 app.config.from_object(Config)
 db.init_app(app)
 JWTManager(app)
